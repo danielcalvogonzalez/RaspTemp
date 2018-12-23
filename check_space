@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Nivel de alarma al 80%
+ALERTA=80
+
+df -h | grep '/dev/root' | awk '{ print $5 " " $1 }' | while read output;
+
+do
+usep=$(echo $output | awk '{ print $1}' | cut -d'%' -f1 )
+partition=$(echo $output | awk '{ print $2 }' )
+
+# -ge es mayor o igual a
+if [ "$usep" -ge "$ALERTA" ]; then
+  echo "--ALERTA--: Poco espacio en '$partition ($usep%)' del servidor $(hostname) en el dia  $(date)" | logger --server 192.168.1.5 
+fi
+done
