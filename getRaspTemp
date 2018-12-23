@@ -1,0 +1,13 @@
+#!/bin/bash
+#
+# Envia la temperatura de la RaspBerry a OpenHab
+#
+#
+# Las siguientes variables definen tanto el servidor OpenHab
+# como el nombre del server
+
+SERVER_IP='192.168.24.6:8080'
+SENSOR_TEMP_NAME='RaspTemp1'
+
+temperatura=`/opt/vc/bin/vcgencmd measure_temp | sed 's/temp=\(.*\).C/\1/'`
+echo curl -X PUT --header "Content-Type: text/plain" --header "Accept: application/json" -d "$temperatura" "http://$SERVER_IP/rest/items/$SENSOR_TEMP_NAME/state"
